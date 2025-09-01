@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}
+<title> taskmate</title>
+{% endblock title %}
+{% block body %}
+<div class="container">
+  <br>
+  {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+ {% endif %}
+
+                <form method="POST" class="row">
+                  {%csrf_token%}
+                  <label class="col-lg-4"> </label>
+                  <input type="text" class="form-control col-lg-6" name="task" placeholder="Enter task">
+                  <button type="submit" class="btn btn-primary col-lg-2">Add</button>
+              </form>
+  <br>
+                        <style>
+                        /* Darker table border */
+                        .table.table-bordered {
+                          border: 2px solid #000 !important; /* Dark black border */
+                        }
+
+                        /* Darker borders for table cells */
+                        .table.table-bordered th,
+                        .table.table-bordered td {
+                          border: 2px solid #000 !important; /* Dark black border */
+                        }
+
+                        /* Optional: Dark header background for better contrast */
+                        .thead-dark th {
+                          background-color: #212529 !important; /* Bootstrap dark */
+                          color: #fff !important;
+                        }
+                      </style>
+                     <table class="table table-bordered border-success text-center">
+                    <thead class="thead-dark">
+                    <tr>
+                      <th style="width: 58%;">Task</th>
+                      <th style="width: 25%;">Done</th>
+                      <th style="width: 8%;">Edit</th>
+                      <th style="width: 8%;">Delete</th>
+                    </tr>
+                  </thead>
+          {% if page_obj %}
+                     {% for  objects in page_obj%}
+                          {%if objects.done%}
+                                <tr class="table-info">
+                    <td style="width: 58%;"><del>{{ objects.task }}</del></td>
+                    <td style="width: 25%;"> <a href="{% url 'pending_task' objects.id %}"> <button type="button" class="btn btn-dark">Mark as pending</button></a> </td>
+                    <td style="width: 8%;"> <a href="{% url 'edit_task' objects.id %}"> <button type="button" class="btn btn-success">Edit</button> </a></td> 
+                    <td style="width: 8%;"><a href="{% url 'delete_task' objects.id %}"> <button type="button" class="btn btn-danger">Delete</button> </a></td>
+                   </tr>
+          {%else%}
+                 <tr>
+    <td style="width: 58%;">{{ objects.task }}</td>
+    <td style="width: 25%;"> <a href="{% url 'complete_task' objects.id %}"> <button type="button" class="btn btn-dark">Mark as completed</button> </a> </td>
+    <td style="width: 8%;"> <a href="{% url 'edit_task' objects.id %}"> <button type="button" class="btn btn-success">Edit</button></a></td>
+    <td style="width: 8%;"><a href="{% url 'delete_task' objects.id %}"><button type="button" class="btn btn-danger">Delete</button></a></td>
+                 </tr>
+
+          {%endif%}
+        {%endfor%}
+      {%endif%}
+              </tbody>
+      </table>
+
+    <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            
+                  <li class="page-item "> <a class="page-link" href="?pg=1"><<</a></li>
+      
+            {%if page_obj.has_previous%}
+                  <li class="page-item"><a class="page-link" href="?pg={{page_obj.previous_page_number}}">{{ page_obj.previous_page_number}}</a></li>
+            {%endif%}
+                  <li class="page-item"><a class="page-link" href="?pg={{page_obj.number}}">{{ page_obj.number}}</a></li>
+            {%if page_obj.has_next%}
+                  <li class="page-item"><a class="page-link" href="?pg={{page_obj.next_page_number}}">{{ page_obj.next_page_number}}</a></li>
+            {%endif%}
+                  <li class="page-item"> <a class="page-link"href="?pg={{page_obj.paginator.num_pages}}">>></a></li>
+            
+          </ul>
+    </nav>
+
+      </div>
+
+{% endblock body %}

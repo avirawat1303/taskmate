@@ -1,0 +1,96 @@
+{% load static%}
+<!doctype html>
+<html lang="en">
+  <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="icon" href="{% static 'images/image.ico' %}" type="image/gif" sizes="16x16">
+    {% block title %}  <!-- jinja block-->
+    {% endblock title %}
+
+  <style>
+  /* Make all nav links the same color */
+  .navbar-dark .navbar-nav .nav-link {
+    color: #f8f9fa !important; /* Light gray/white text */
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  /* Hover effect */
+  .navbar-dark .navbar-nav .nav-link:hover {
+    color: #0d6efd !important; /* Bootstrap blue */
+    text-decoration: underline;
+  }
+
+  /* Active link */
+  .navbar-dark .navbar-nav .nav-link.active {
+    color: #0d6efd !important;
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <div class="container-fluid">
+    
+    <!-- Logo -->
+    <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
+      <img src="{% static 'images/logo.png' %}" 
+           alt="Taskmate Logo" 
+           style="height: 40px; width: auto;" 
+           >
+    </a>
+
+    <!-- Mobile Toggle -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+            data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" 
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar Links (Left Aligned) -->
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'todolist' %}">Todo List</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'about' %}">About Us</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- User Auth Buttons -->
+    {% if user.is_authenticated %}
+  <div class="form-inline my-2 my-lg-0 d-flex align-items-center">
+    <span class="p-2 text-white">Logged in as {{ user.username }}</span>
+    <form action="{% url 'logout' %}" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button class="btn btn-info" type="submit">Logout</button>
+   </form>
+  </div>
+{% else %}
+  <div class="d-flex">
+    <a href="{% url 'login' %}" class="btn btn-success me-2">Login</a>
+    <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+  </div>
+{% endif %}
+
+    
+  </div>
+</nav>
+
+
+  </head>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+ {% block body %}{% endblock body %}
+</html>
